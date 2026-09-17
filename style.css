@@ -1,0 +1,102 @@
+/* =========================================================
+   1. MOBILE-FIRST VIEW (Mặc định: không dùng media query)
+   ========================================================= */
+
+/* Hỗ trợ scroll mượt mặc định (sẽ được tắt ở prefers-reduced-motion) */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Container chứa các figure: Grid 1 cột, gap 10px */
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+/* Định dạng cơ bản cho figure */
+figure {
+  margin: 0;
+  padding: 10px;
+  border: 2px solid #ccc;
+  background-color: #f9f9f9;
+  color: #222222;
+  overflow: hidden; /* Đảm bảo bo tròn cắt qua ảnh bên trong nếu có */
+}
+
+/* Ảnh co giãn theo figure */
+figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* =========================================================
+   2. TABLET VIEW (min-width: 772px)
+   - Lưới 2 cột
+   - Bo tròn hình tròn (border-radius: 50%)
+   - Figure cuối cùng trải dài 2 cột
+   ========================================================= */
+@media (min-width: 772px) {
+  .gallery {
+    /* Không lặp lại display: grid hay gap */
+    grid-template-columns: 1fr 1fr;
+  }
+
+  figure {
+    border-radius: 50%;
+  }
+
+  figure:last-child {
+    grid-column: span 2;
+  }
+}
+
+
+/* =========================================================
+   3. LARGE SCREEN VIEW (min-width: 992px)
+   - Không dùng max-width
+   - Bỏ bo tròn trên tất cả figure
+   - Cứ mỗi figure thứ 3 chiếm 2 cột
+   ========================================================= */
+@media (min-width: 992px) {
+  /* Bỏ border-radius đã đặt ở tablet */
+  figure {
+    border-radius: 0;
+  }
+
+  /* Reset lại figure cuối nếu nó vô tình trùng hoặc không phải là con thứ 3 */
+  figure:last-child {
+    grid-column: auto;
+  }
+
+  /* Mỗi figure thứ 3 (3, 6, 9,...) chiếm cả 2 cột */
+  figure:nth-child(3n) {
+    grid-column: span 2;
+  }
+}
+
+
+/* =========================================================
+   4. ACCESSIBILITY: PREFERS-REDUCED-MOTION
+   - Tắt animation cuộn trang
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+
+/* =========================================================
+   5. ACCESSIBILITY: PREFERS-COLOR-SCHEME (Dark Mode)
+   - Đảm bảo độ tương phản đạt chuẩn WCAG (WAVE Validator)
+   ========================================================= */
+@media (prefers-color-scheme: dark) {
+  figure {
+    background-color: #1e1e1e; /* Màu nền tối */
+    color: #ffeb3b;            /* Màu vàng sáng đảm bảo độ tương phản trên nền tối */
+    border-color: #000000;     /* Viền đen theo yêu cầu */
+  }
+}
